@@ -87,20 +87,20 @@ export default function AnnouncementAdmin() {
       <div style={styles.card}>
         <div style={styles.formSection}>
           <div style={styles.inputGroup}>
-            <label style={styles.label}>English Subtitle</label>
+            <label style={styles.label}>English title</label>
             <input 
               style={styles.input} 
-              placeholder="Enter English Subtitle..."
+              placeholder="Enter English title..."
               value={data.subtitle.en} 
               onChange={e => setData({...data, subtitle: {...data.subtitle, en: e.target.value}})} 
             />
           </div>
 
           <div style={styles.inputGroup}>
-            <label style={styles.label}>Kannada Subtitle</label>
+            <label style={styles.label}>Kannada title</label>
             <input 
               style={styles.input} 
-              placeholder="ಕನ್ನಡ ಉಪಶೀರ್ಷಿಕೆ ನಮೂದಿಸಿ..."
+              placeholder="ಕನ್ನಡ ಶೀರ್ಷಿಕೆ ನಮೂದಿಸಿ..."
               value={data.subtitle.ka} 
               onChange={e => setData({...data, subtitle: {...data.subtitle, ka: e.target.value}})} 
             />
