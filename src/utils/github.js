@@ -20,7 +20,7 @@ function decodeBase64UTF8(base64) {
 }
 
 export async function getFile(path) {
-  const url = `${API}/repos/${import.meta.env.VITE_GITHUB_OWNER}/${import.meta.env.VITE_GITHUB_REPO}/contents/${path}`;
+  const url = `${API}/repos/${import.meta.env.VITE_GITHUB_OWNER}/${import.meta.env.VITE_GITHUB_REPO}/contents/${path}?t=${Date.now()}`;
   
   const res = await fetch(url, { 
     headers: headers(), 
