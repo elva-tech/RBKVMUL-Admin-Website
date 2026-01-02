@@ -1,0 +1,314 @@
+/* =====================
+   ADMIN GLOBAL RESET
+===================== */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+.admin-app {
+  font-family: "Poppins", system-ui, sans-serif;
+  background: #f4f8fc;
+  min-height: 100vh;
+  color: #1f2937;
+}
+
+/* Headings */
+.admin-app h1 {
+  font-size: 1.8rem;
+  color: #0a4da2;
+  margin-bottom: 12px;
+  animation: fadeIn 0.5s ease;
+}
+
+.admin-app h2 {
+  font-size: 1.4rem;
+  color: #083b7a;
+  margin-bottom: 10px;
+  animation: fadeIn 0.7s ease;
+}
+
+.admin-app p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #374151;
+  animation: fadeIn 0.9s ease;
+}
+
+/* =====================
+   LAYOUT
+===================== */
+
+.admin-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.admin-card {
+  background: #ffffff;
+  border: 1px solid #e3ecf7;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* =====================
+   NEWS LIST LAYOUT
+===================== */
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.news-item {
+  display: flex;
+  gap: 20px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  align-items: flex-start;
+}
+
+.news-item-image {
+  width: 190px;
+  height: 190px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.news-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.news-item-actions {
+  display: flex;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+/* =====================
+   FORMS
+===================== */
+
+.admin-app input,
+.admin-app textarea,
+.admin-app select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cfdff1;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-app input:focus,
+.admin-app textarea:focus {
+  border-color: #0a4da2;
+  box-shadow: 0 0 0 2px rgba(10, 77, 162, 0.15);
+}
+
+/* =====================
+   BUTTONS
+===================== */
+
+.admin-app button {
+  background: #0a4da2;
+  color: #ffffff;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.admin-app button:hover {
+  background: #083b7a;
+}
+
+/* Secondary buttons (Delete etc.) */
+.admin-app button.secondary {
+  background: #ffffff;
+  color: #0a4da2;
+  border: 1px solid #0a4da2;
+}
+
+.admin-app button.secondary:hover {
+  background: #eaf1fb;
+}
+
+/* Delete button specific styling */
+.admin-app button.delete-btn {
+  background: #ffffff;
+  color: #dc3545;
+  border: 1px solid #dc3545;
+  padding: 8px 16px;
+  font-weight: 500;
+}
+
+.admin-app button.delete-btn:hover {
+  background: #dc3545;
+  color: #ffffff;
+}
+
+/* =====================
+   LOGOUT BUTTON (CENTERED)
+===================== */
+
+.logout-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.admin-app button.logout {
+  background: #ff4b4b;
+}
+
+.admin-app button.logout:hover {
+  background: #d64141;
+}
+
+/* =====================
+   NAV / HEADER
+===================== */
+
+.admin-nav {
+  background: #ffffff;
+  border-bottom: 1px solid #e3ecf7;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-nav a {
+  margin-right: 20px;
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.admin-nav a.active {
+  color: #0a4da2;
+}
+
+.admin-nav a::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -6px;
+  left: 0;
+  background-color: #0a4da2;
+  transition: width 0.3s ease;
+}
+
+.admin-nav a:hover::before {
+  width: 100%;
+}
+
+/* =====================
+   TABLES (NEWS / NOTIFICATIONS)
+===================== */
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  text-align: left;
+  background: #f4f8fc;
+  padding: 12px;
+  font-size: 13px;
+  color: #0a4da2;
+}
+
+.admin-table td {
+  padding: 12px;
+  border-top: 1px solid #e3ecf7;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.admin-table tr:hover {
+  background-color: #f4f8fc;
+}
+
+/* Action column (Delete buttons) */
+.admin-table td.actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.admin-table button.secondary {
+  padding: 6px 12px;
+  font-size: 13px;
+  margin-left: 8px;
+}
+
+/* Prevent hover jump inside tables */
+.admin-table button:hover {
+  transform: none;
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+
+@media (max-width: 768px) {
+  .admin-page {
+    padding: 20px 14px;
+  }
+
+  .admin-app h1 {
+    font-size: 1.4rem;
+  }
+
+  .admin-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-nav a {
+    margin-bottom: 10px;
+  }
+
+  .news-item {
+    flex-direction: column;
+  }
+
+  .news-item-image {
+    width: 100%;
+    height: 200px;
+  }
+}
+
+/* =====================
+   ANIMATIONS
+===================== */
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
