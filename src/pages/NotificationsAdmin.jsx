@@ -29,61 +29,54 @@ export default function NotificationsAdmin() {
   });
 
  const addNotification = async () => {
-    if (!form.titleEn || !form.date) return Swal.fire("Warning", "Fill required fields", "warning");
-    setLoading(true);
-    try {
-      let uploadedFileUrl = "";
-      if (docFile) {
-        const fileName = `notif-${Date.now()}-${docFile.name.replace(/\s+/g, '-')}`;
-        const base64 = await toBase64(docFile);
-        
-        // 1. Upload the physical file to GitHub
-        await commitFile({
-          path: `public/pdfs/${fileName}`,
-          content: base64,
-          message: `Upload file: ${fileName}`,
-          isBase64: true,
-        });
-
-        // 2. Create the TEXT link to that file
-        uploadedFileUrl = `https://raw.githubusercontent.com/elva-tech/RBKVMUL-website/main/public/pdfs/${fileName}`;
-      }
-
-      // 3. Create the data object
-      const newItem = {
-        id: Date.now(),
-        title: { en: form.titleEn, ka: form.titleKa || form.titleEn },
-        date: form.date,
-        fileUrl: uploadedFileUrl // This is now a clean string
-      };
-
-      const updated = [newItem, ...notifications];
-
-      // 4. SAVE TO REPO - This is the most important part
-      const dataFile = await getFile("src/data/notofications.js");
+  if (!form.titleEn || !form.date) return Swal.fire("Error", "Need Title & Date", "error");
+  setLoading(true);
+  try {
+    let fileUrl = "";
+    
+    // 1. If a file is selected, upload it exactly like an image
+    if (docFile) {
+      const fileName = `${Date.now()}-${docFile.name.replace(/\s+/g, '-')}`;
+      const base64 = await toBase64(docFile);
       
-      // JSON.stringify converts the 'uploadedFileUrl' into "https://raw..." 
-      // so it saves as a string, not a variable.
-      const content = `export const notifications = ${JSON.stringify(updated, null, 2)};`;
-
       await commitFile({
-        path: "src/data/notofications.js",
-        sha: dataFile.sha,
-        content,
-        message: "Add notification with fixed URL",
-        isBase64: false,
+        path: `public/pdfs/${fileName}`,
+        content: base64,
+        message: `Upload ${fileName}`,
+        isBase64: true,
       });
-
-      setNotifications(updated);
-      setForm({ titleEn: "", titleKa: "", date: "" });
-      setDocFile(null);
-      Swal.fire("Success! ✅", "Notification Added", "success");
-    } catch (err) { 
-      Swal.fire("Error", err.message, "error"); 
-    } finally { 
-      setLoading(false); 
+      // Direct raw link to the file
+      fileUrl = `https://raw.githubusercontent.com/elva-tech/RBKVMUL-website/main/public/pdfs/${fileName}`;
     }
-  };
+
+    // 2. Prepare the data object
+    const newItem = {
+      id: Date.now(),
+      title: { en: form.titleEn, ka: form.titleKa || form.titleEn },
+      date: form.date,
+      fileUrl: fileUrl 
+    };
+
+    const updated = [newItem, ...notifications];
+    const file = await getFile("src/data/notofications.js");
+    const content = `export const notifications = ${JSON.stringify(updated, null, 2)};`;
+
+    // 3. Save the data file
+    await commitFile({
+      path: "src/data/notofications.js",
+      sha: file.sha,
+      content,
+      message: "Update notifications",
+      isBase64: false,
+    });
+
+    setNotifications(updated);
+    setForm({ titleEn: "", titleKa: "", date: "" });
+    setDocFile(null);
+    Swal.fire("Success", "Added Successfully!", "success");
+  } catch (err) { Swal.fire("Error", err.message, "error"); }
+  finally { setLoading(false); }
+};
 
   const deleteNotification = async (id) => {
     const result = await Swal.fire({
@@ -132,7 +125,9 @@ export default function NotificationsAdmin() {
             <div style={{ flex: 1 }}>
               <div style={styles.dateTag}>{item.date}</div>
               <h4 style={styles.itemTitle}>{item.title.en}</h4>
-              {item.fileUrl && <span style={{ fontSize: '11px', color: 'green' }}>📎 File Attached</span>}
+              {typeof item.fileUrl === "string" && item.fileUrl.trim() !== "" && (
+  <span style={{ fontSize: "11px", color: "green" }}>📎 File Attached</span>
+)}
             </div>
             <button onClick={() => deleteNotification(item.id)} style={styles.deleteButton}>Delete</button>
           </div>
