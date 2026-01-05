@@ -14,9 +14,15 @@ function encodeBase64UTF8(text) {
 
 // Helper to decode base64 to UTF-8 text
 function decodeBase64UTF8(base64) {
-  const binString = atob(base64);
-  const bytes = Uint8Array.from(binString, char => char.codePointAt(0));
-  return new TextDecoder("utf-8").decode(bytes);
+try {
+    const binString = atob(base64);
+    const bytes = Uint8Array.from(binString, (m) => m.codePointAt(0));
+    // The "fatal: false" ensures it doesn't choke on weird characters
+    return new TextDecoder("utf-8", { fatal: false }).decode(bytes);
+  } catch (e) {
+    console.error("Decoding failed", e);
+    return atob(base64); // Fallback
+  }
 }
 
 export async function getFile(path) {
