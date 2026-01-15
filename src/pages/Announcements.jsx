@@ -6,15 +6,15 @@ import Swal from "sweetalert2";
 export default function AnnouncementAdmin() {
   
   const [data, setData] = useState({
-    active: true, // Always active by default
+    active: true,
     title: { en: "Announcement", ka: "ಪ್ರಕಟಣೆ" },
     subtitle: { en: "", ka: "" },
     description: { en: "", ka: "" },
-    image: ""
+    images: [] 
   });
 
   const [loading, setLoading] = useState(false);
-  const [imageFile, setImageFile] = useState(null);
+  const [imageFiles, setImageFiles] = useState([]); // Changed to handle array
 
   const toBase64 = (file) => new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -24,27 +24,32 @@ export default function AnnouncementAdmin() {
   });
 
   const handleSave = async () => {
-    if (!data.subtitle.en || !imageFile) {
-      Swal.fire("Please fill in the English Subtitle and select an image.", "warning");
+    // Check if subtitle and at least one image exists
+    if (!data.subtitle.en || imageFiles.length === 0) {
+      Swal.fire("Please fill in the English Subtitle and select at least one image.", "warning");
       return;
     }
 
     setLoading(true);
     try {
       let currentData = { ...data };
+      const uploadedPaths = [];
 
-      // 1. Upload Image to public/assets/
-      const fileName = `popup-${Date.now()}-${imageFile.name.replace(/\s+/g, '-')}`;
-      const base64 = await toBase64(imageFile);
+      // 1. Upload All Selected Images to public/assets/
+      for (const file of imageFiles) {
+        const fileName = `popup-${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+        const base64 = await toBase64(file);
+        
+        await commitFile({
+          path: `public/assets/${fileName}`,
+          content: base64,
+          message: "Update announcement image",
+          isBase64: true
+        });
+        uploadedPaths.push(`/assets/${fileName}`);
+      }
       
-      await commitFile({
-        path: `public/assets/${fileName}`,
-        content: base64,
-        message: "Update announcement image",
-        isBase64: true
-      });
-      
-      currentData.image = `/assets/${fileName}`;
+      currentData.images = uploadedPaths;
 
       // 2. Update the Data File
       const file = await getFile("src/data/popupData.js");
@@ -64,10 +69,11 @@ export default function AnnouncementAdmin() {
         title: { en: "Announcement", ka: "ಪ್ರಕಟಣೆ" },
         subtitle: { en: "", ka: "" },
         description: { en: "", ka: "" },
-        image: currentData.image
+        images: currentData.images
       });
-      setImageFile(null);
-     Swal.fire({
+      setImageFiles([]);
+
+      Swal.fire({
         title: 'Published! ✅',
         text: 'The website will update in 2 minutes.',
         icon: 'success',
@@ -75,7 +81,6 @@ export default function AnnouncementAdmin() {
       });
     } catch (err) {
       Swal.fire("Error", err.message, "error");
-      
     } finally {
       setLoading(false);
     }
@@ -127,20 +132,26 @@ export default function AnnouncementAdmin() {
           </div>
           
           <div style={styles.imageSection}>
-            <label style={styles.label}>Upload New Image</label>
+            <label style={styles.label}>Upload New Images (Select multiple)</label>
             <input 
               type="file" 
               accept="image/*" 
-              onChange={e => setImageFile(e.target.files[0])} 
+              multiple 
+              onChange={e => setImageFiles(Array.from(e.target.files))} 
             />
-            {data.image && (
+            {data.images && data.images.length > 0 && (
               <div style={{marginTop: '10px'}}>
-                <p style={{fontSize: '11px', color: '#666'}}>Current Live Image:</p>
-                <img 
-                  src={data.image} 
-                  style={{width: '120px', borderRadius: '4px'}} 
-                  onError={(e) => { e.target.src = `https://rbkvmul-website.vercel.app${data.image}`; }}
-                />
+                <p style={{fontSize: '11px', color: '#666'}}>Current Live Images ({data.images.length}):</p>
+                <div style={{display: 'flex', gap: '5px', overflowX: 'auto'}}>
+                  {data.images.map((img, idx) => (
+                    <img 
+                      key={idx}
+                      src={img} 
+                      style={{width: '80px', borderRadius: '4px'}} 
+                      onError={(e) => { e.target.src = `https://rbkvmul-website.vercel.app${img}`; }}
+                    />
+                  ))}
+                </div>
               </div>
             )}
           </div>

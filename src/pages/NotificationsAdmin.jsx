@@ -128,7 +128,7 @@ export default function NotificationsAdmin() {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.header}>📢 Manage Notifications</h2>
+      <h2 style={styles.header}>Manage Notifications</h2>
       
       <div style={styles.card}>
         <div style={styles.formGrid}>
@@ -209,7 +209,7 @@ const styles = {
   formGrid: { display: "flex", flexDirection: "column", gap: 16 },
   input: { padding: "14px", borderRadius: "8px", border: "1px solid #ddd" },
   fileInput: { padding: "10px", border: "2px dashed #ddd", borderRadius: "8px", width: "100%", cursor: "pointer" },
-  addButton: { padding: "16px", backgroundColor: "#28a745", color: "#fff", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", marginTop: "10px" },
+  addButton: { padding: "16px", backgroundColor: "#007bff", color: "#fff", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", marginTop: "10px" },
   list: { display: "flex", flexDirection: "column", gap: 16 },
   listItem: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", background: "#fff", padding: "24px", borderRadius: "10px", border: "1px solid #e0e0e0" },
   dateTag: { fontSize: "13px", color: "#007bff", fontWeight: "bold", marginBottom: "8px" },
